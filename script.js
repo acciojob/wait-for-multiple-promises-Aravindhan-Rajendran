@@ -1,15 +1,38 @@
-function randomtime(){
-	return Math.floor(Math.random()*3000)+1000;
-}
-const Promise1 = new Promise(function(resolve, reject){
-	let time=randomtime();
-	setTimeout(()=>{resolve(time),time});
-});
-const Promise2 = new Promise(function(resolve, reject){
-	setTimeout(()=>{resolve(time),time});
-});
-const Promise3 = new Promise(function(resolve, reject){
-	setTimeout(()=>{resolve(time),time});
-});
+ function randomTime() {
+      return Math.floor(Math.random() * 2000) + 1000; // Random time between 1 and 3 seconds
+    }
 
-Promise.all([Promise1,Promise2,Promise3]).then(total => {console.log(total)})
+    const startTime = performance.now();
+
+    const promises = [1, 2, 3].map((index) => {
+      const time = randomTime();
+      return new Promise((resolve) => {
+        setTimeout(() => resolve({ index, time }), time);
+      });
+    });
+
+    Promise.all(promises).then(results => {
+      const totalTime = (performance.now() - startTime) / 1000;
+      const tableBody = document.getElementById('output');
+      tableBody.innerHTML = ''; // Clear the loading row
+
+      results.forEach(result => {
+        const row = document.createElement('tr');
+        const cell1 = document.createElement('td');
+        const cell2 = document.createElement('td');
+        cell1.textContent = `Promise ${result.index}`;
+        cell2.textContent = (result.time / 1000).toFixed(3);
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        tableBody.appendChild(row);
+      });
+
+      const totalRow = document.createElement('tr');
+      const totalCell1 = document.createElement('td');
+      const totalCell2 = document.createElement('td');
+      totalCell1.textContent = 'Total';
+      totalCell2.textContent = totalTime.toFixed(3);
+      totalRow.appendChild(totalCell1);
+      totalRow.appendChild(totalCell2);
+      tableBody.appendChild(totalRow);
+    });
