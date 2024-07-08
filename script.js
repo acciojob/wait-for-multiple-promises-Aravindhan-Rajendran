@@ -1,4 +1,4 @@
- function randomTime() {
+    function randomTime() {
       return Math.floor(Math.random() * 2000) + 1000; // Random time between 1 and 3 seconds
     }
 
